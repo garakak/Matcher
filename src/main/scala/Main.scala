@@ -5,6 +5,9 @@ import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
+import java.io._
+import java.nio.file.Files
+import java.nio.file.Paths
 
 object Main extends App {
 
@@ -147,12 +150,12 @@ object Main extends App {
   }
 
 
-  def res(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
+  def main(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
     for {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
-      firstClient = input_clients.find(_.name == order1.client).get
-      secondClient = input_clients.find(_.name == order2.client).get
+      firstClient = input_clients.find(_.name == order1.client).get  //TODO: Can be modified to avoid
+      secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
       tmp <- if (order1.operation == 's') {
 
         input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
@@ -165,7 +168,10 @@ object Main extends App {
     } yield tmp
   }
 
-  //println(sell(cli1, req1))
-  println(res(listOfOrders, listOfClients))
+  println(main(listOfOrders, listOfClients))
 
+  val outcome_result: List[Client] = main(listOfOrders, listOfClients)
+
+  val content = outcome_result.mkString("\n").getBytes
+  Files.write(Paths.get("result.txt"), content)
 }
