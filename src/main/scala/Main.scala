@@ -8,8 +8,10 @@ import scala.concurrent.duration.Duration
 
 object Main extends App {
 
-  val source = scala.io.Source.fromFile("file.txt")
-  val lines: String = try source.mkString finally source.close()
+  //val source = scala.io.Source.fromFile("file.txt")
+  //val lines = try source.mkString.split("/t") finally source.close()
+
+
 
   case class Client(name: String,
                     dollarBalance: Int,
@@ -25,10 +27,10 @@ object Main extends App {
                    count: Int)
 
   val listOfClients = List(Client("C1", 1000, 10, 5, 15, 0),
-                           Client("C2", 2000, 15, 4, 12, 1))
+                           Client("C2", 2000, 10, 5, 15, 0))
 
-  val listOfOrders: List[Order] = List(Order("C1", 'b', 'A', 7, 12),
-                          Order("C2", 's', 'A', 7, 12))
+  val listOfOrders: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
+                                       Order("C2", 's', 'A', 5, 10))
 
   /**
     * Function, that realises "sell" operation
@@ -145,26 +147,20 @@ object Main extends App {
   }
 
 
-    val req1 = Order("C1", 'b', 'A', 7, 12)
-    val req2 = Order("C1", 's', 'A', 7, 12)
-    val cli1 = Client("C1", 1000, 10, 5, 15, 0)
-    val cli2 = Client("C2", 2000, 15, 4, 12, 1)
-
-
   def res(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
     for {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
-      firstClient = input_clients.find(_.name == order1.client)
-      secondClient = input_clients.find(_.name == order2.client)
+      firstClient = input_clients.find(_.name == order1.client).get
+      secondClient = input_clients.find(_.name == order2.client).get
       tmp <- if (order1.operation == 's') {
 
-        input_clients.map { case `firstClient` => sell(firstClient.get, order1); case x => x }
-        input_clients.map { case `secondClient` => buy(secondClient.get, order2); case x => x }
+        input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
+        input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
       } else {
 
-        input_clients.map { case `firstClient` => buy(firstClient.get, order1); case x => x }
-        input_clients.map { case `secondClient` => sell(secondClient.get, order2); case x => x }
+        input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
+        input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
       }
     } yield tmp
   }
