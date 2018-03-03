@@ -18,10 +18,10 @@ The stock has just 4 currencies: A, B, C, D and $ balance.
      
          Client: C2, op: s, cur: A, p: 8, N: 10
 
-    cur - currency, that client wants to buy,
-    op - operation, "sell" or "buy"
-    p - price of a currency
-    N - count of a currency.
+         cur - currency, that client wants to buy,
+         op - operation, "sell" or "buy"
+         p - price of a currency
+         N - count of a currency.
 
 
 # Notes:
@@ -31,6 +31,6 @@ The stock has just 4 currencies: A, B, C, D and $ balance.
 3) CLients balance may be negative.
 
 # Output data:
-  File "otcome.txt".
+  File "outcome.txt".
   Contains list of clients after realisation of all orders.
 
