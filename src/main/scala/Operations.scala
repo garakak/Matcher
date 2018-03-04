@@ -1,4 +1,5 @@
 import Main.{Client, Order}
+import utils._
 
 object Operations {
 
@@ -78,6 +79,24 @@ object Operations {
         client.balanceC,
         client.balanceD - order.count
       )
+
+    case anotherCurrency =>
+      println(NoSuchCurrencyError("No such currency:", anotherCurrency)) //Can be converted to logging
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count
+      )
+
+      Client(
+        client.name,
+        client.dollarBalance,
+        client.balanceA,
+        client.balanceB,
+        client.balanceC,
+        client.balanceD
+      )
   }
 
   /**
@@ -154,6 +173,24 @@ object Operations {
         client.balanceB,
         client.balanceC,
         client.balanceD + order.count
+      )
+
+    case anotherCurrency =>
+      println(NoSuchCurrencyError("No such currency:", anotherCurrency)) //Can be converted to logging
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count
+      )
+
+      Client(
+        client.name,
+        client.dollarBalance,
+        client.balanceA,
+        client.balanceB,
+        client.balanceC,
+        client.balanceD
       )
   }
 

@@ -3,6 +3,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import java.io._
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.NoSuchElementException
+
 import Operations._
 
 object Main extends App {
@@ -52,7 +54,7 @@ object Main extends App {
     for {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
-      firstClient = input_clients.find(_.name == order1.client).get  //TODO: Can be modified to avoid
+      firstClient = input_clients.find(_.name == order1.client).get  //TODO: Can be modified with "getOrElse" to avoid
       secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
       tmp <- {
         if (order1.operation == 's' && !order1.isCompleted && !order2.isCompleted) {
