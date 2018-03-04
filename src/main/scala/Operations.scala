@@ -1,5 +1,4 @@
-import Main.{Client, Order}
-import utils._
+import utils.{Client, NoSuchCurrencyError, Order}
 
 object Operations {
 

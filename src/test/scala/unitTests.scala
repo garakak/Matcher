@@ -1,6 +1,7 @@
 import org.scalatest.Matchers
 import org.scalatest.Matchers._
 import Main._
+import utils.{Client, Order}
 
 class unitTests extends Matchers {
 

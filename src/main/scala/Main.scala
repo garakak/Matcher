@@ -4,36 +4,24 @@ import java.io._
 import java.nio.file.Files
 import java.nio.file.Paths
 
-import Operations.{sell, buy, orderCompletion}
+import utils.Readers
+import Operations.{buy, orderCompletion, sell}
+import utils.{Client, Order}
+
+import scala.io.Source
 
 object Main extends App {
 
-  //val source = scala.io.Source.fromFile("file.txt")
-  //val lines = try source.mkString.split("/t") finally source.close()
+  val listOfClients: List[Client] = Readers.readClients("clients.txt")
+  val listOfOrders: List[Order] = Readers.readOrders("orders.txt")
 
-  case class Client(name: String,
-                    dollarBalance: Int,
-                    balanceA: Int,
-                    balanceB: Int,
-                    balanceC: Int,
-                    balanceD: Int)
-
-  case class Order(client: String,
-                   operation: Char,
-                   currency: Char,
-                   price: Int,
-                   count: Int,
-                   isCompleted: Boolean = false)
-
-  val listOfClients = List(Client("C1", 1000, 10, 5, 15, 0),
+  val listOfClientsTest = List(Client("C1", 1000, 10, 5, 15, 0),
                            Client("C2", 2000, 10, 5, 15, 0),
-    Client("C3", 2000, 10, 5, 15, 0)
-                           )
+    Client("C3", 2000, 10, 5, 15, 0))
 
-  val listOfOrders: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
+  val listOfOrdersTest: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
                                        Order("C2", 's', 'A', 5, 10),
-    Order("C3", 's', 'A', 5, 10)
-    )
+    Order("C3", 's', 'A', 5, 10))
 
   /**
     * Checks, if order is correct
@@ -54,7 +42,7 @@ object Main extends App {
   }
 
 
-  def affectedClients(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
+  def affectedClients(input_orders: List[utils.Order], input_clients: List[utils.Client]): List[utils.Client] = {
     for {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
@@ -99,8 +87,8 @@ object Main extends App {
     } yield tmp
   }.distinct
 
-  if (affectedClients(listOfOrders, listOfClients) == List()) println(listOfClients)
-  else println(affectedClients(listOfOrders, listOfClients))
+  if (affectedClients(listOfOrdersTest, listOfClientsTest) == List()) println(listOfClientsTest)
+  else println(affectedClients(listOfOrdersTest, listOfClientsTest))
 
 //  val outcome_result: List[Client] = main(listOfOrders, listOfClients)
 //
