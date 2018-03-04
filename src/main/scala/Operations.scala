@@ -1,33 +1,23 @@
-object matcher {
+import Main.{Client, Order}
 
-  case class Client(name: String,
-                    dollarBalance: Int,
-                    balanceA: Int,
-                    balanceB: Int,
-                    balanceC: Int,
-                    balanceD: Int)
-
-  case class Order(client: String,
-                   operation: Char,
-                   currency: Char,
-                   price: Int,
-                   count: Int)
-
-  val listOfClients = List(Client("C1", 1000, 10, 5, 15, 0),
-    Client("C2", 2000, 10, 5, 15, 0))
-
-  val listOfOrders: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
-    Order("C2", 's', 'A', 5, 10))
+object Operations {
 
   /**
     * Function, that realises "sell" operation
     *
     * Realised via "case 'currency' => _" because there are just 4 currencies,
-    * if there were more of them, other method would be chosen
+    * if there were more of them, another method would be chosen
     */
   def sell(client: Client, order: Order): Client = order.currency match {
 
     case 'A' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -38,6 +28,13 @@ object matcher {
       )
 
     case 'B' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -48,6 +45,13 @@ object matcher {
       )
 
     case 'C' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -57,7 +61,15 @@ object matcher {
         client.balanceD
       )
 
+
     case 'D' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -72,11 +84,18 @@ object matcher {
     * Function, that realises "buy" operation
     *
     * Realised via "case 'currency' => _" because there are just 4 currencies,
-    * if there were more of them, other method would be chosen
+    * if there were more of them, another method would be chosen
     */
   def buy(client: Client, order: Order): Client = order.currency match {
 
     case 'A' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -87,6 +106,13 @@ object matcher {
       )
 
     case 'B' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -97,6 +123,13 @@ object matcher {
       )
 
     case 'C' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -107,6 +140,13 @@ object matcher {
       )
 
     case 'D' =>
+      Order(order.client,
+        order.operation,
+        order.currency,
+        order.price,
+        order.count,
+        isCompleted = true)
+
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -117,44 +157,4 @@ object matcher {
       )
   }
 
-
-  /**
-    * Checks, if order is correct
-    */
-  def check_order(firstRequest: Order, secondRequest: Order): Boolean = {
-
-    firstRequest.client != secondRequest.client &&
-      firstRequest.operation != secondRequest.operation &&
-      (firstRequest.currency,
-        firstRequest.count,
-        firstRequest.price) ==
-        (secondRequest.currency,
-          secondRequest.count,
-          secondRequest.price)
-  }
-
-
-  def res(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
-    for {
-      order1 <- input_orders
-      order2 <- input_orders if check_order(order1, order2)
-      firstClient = input_clients.find(_.name == order1.client).get  //TODO: Can be modified to avoid
-      secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
-      tmp <-
-        if (order1.operation == 's') {
-
-        input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
-        input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
-      } else {
-
-        input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
-        input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
-      }
-    } yield tmp
-  }
-
-  println(res(listOfOrders, listOfClients))
-
 }
-
-
