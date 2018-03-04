@@ -65,12 +65,12 @@ class unitTests extends Matchers {
 
 
   // THIS TEST CAN BE USED ONLY AFTER RESOLVING GETTING "None" VALUE WHILE HAVING ORDER FROM NON_EXISTING CLIENT
-//  val testListOfClients4 = List(Client("C1", 1000, 10, 5, 15, 0),
+//  val testListOfClients7 = List(Client("C1", 1000, 10, 5, 15, 0),
 //                                Client("C2", 2000, 10, 5, 15, 0))
-//  val testListOfOrders4 = List(Order("C1", 'b', 'A', 5, 10),
+//  val testListOfOrders7 = List(Order("C1", 'b', 'A', 5, 10),
 //                               Order("C3", 's', 'A', 5, 10))
 //
-//  main(testListOfOrders4, testListOfClients4) should be (emptyList)
+//  main(testListOfOrders7, testListOfClients4) should be (emptyList)
 
 
 }

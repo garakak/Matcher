@@ -1,11 +1,7 @@
-import java.nio.file.Files
-import java.nio.file.Paths
-
+import utils.Writer
 import utils.Readers
 import Operations.{buy, orderCompletion, sell}
 import utils.{Client, Order}
-
-import scala.io.Source
 
 object Main extends App {
 
@@ -25,8 +21,8 @@ object Main extends App {
         (secondRequest.currency,
           secondRequest.count,
           secondRequest.price) &&
-    !firstRequest.isCompleted &&
-    !secondRequest.isCompleted
+      !firstRequest.isCompleted &&
+      !secondRequest.isCompleted
 
   }
 
@@ -38,7 +34,7 @@ object Main extends App {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
 
-      firstClient = input_clients.find(_.name == order1.client).get  //TODO: Can be modified with "getOrElse" to avoid
+      firstClient = input_clients.find(_.name == order1.client).get //TODO: Can be modified with "getOrElse" to avoid
       secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
 
       tmp <- {
@@ -49,9 +45,9 @@ object Main extends App {
           input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
 
-      } filter {
-        old => old != firstClient && old != secondClient
-      }
+        } filter {
+          old => old != firstClient && old != secondClient
+        }
         else if (order1.operation == 'b' && !order1.isCompleted && !order2.isCompleted) {
 
           input_orders.map { case `order1` => orderCompletion(order1); case x => x }
@@ -59,12 +55,12 @@ object Main extends App {
           input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
 
-      } filter {
-        old => old != firstClient && old != secondClient
-      }
+        } filter {
+          old => old != firstClient && old != secondClient
+        }
         else {
-          input_orders.map {x => x}
-          input_clients.map {x => x}
+          input_orders.map { x => x }
+          input_clients.map { x => x }
         } filter {
           old => old != firstClient && old != secondClient
         }
@@ -73,12 +69,12 @@ object Main extends App {
     } yield tmp
   }.distinct
 
-  if (affectedClients(listOfOrders, listOfClients) == List()) println(listOfClients)
-  else println(affectedClients(listOfOrders, listOfClients))
-
-
-  val outcome_result: List[Client] = affectedClients(listOfOrders, listOfClients)
-
-  val content = outcome_result.mkString("\n").getBytes
-  Files.write(Paths.get("result.txt"), content)
+  // Writing to a file is combined with printing for better visualisation
+  if (affectedClients(listOfOrders, listOfClients).isEmpty) {
+    Writer.writeToFile(listOfClients)
+    println(listOfClients)
+  } else {
+    Writer.writeToFile(affectedClients(listOfOrders, listOfClients))
+    println(affectedClients(listOfOrders, listOfClients))
+  }
 }
