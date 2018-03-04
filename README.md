@@ -28,7 +28,7 @@ The stock has just 4 currencies: A, B, C, D and $ balance.
 
 1) Partial matching is not included.
 2) Self-orders are not included.
-3) CLients balance may be negative.
+3) Clients balance may be negative.
 
 # Output data:
   File "outcome.txt".
