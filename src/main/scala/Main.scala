@@ -1,19 +1,14 @@
-import java.util.NoSuchElementException
-import java.util.concurrent.TimeUnit
-
-import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 import java.io._
 import java.nio.file.Files
 import java.nio.file.Paths
+import Operations._
 
 object Main extends App {
 
   //val source = scala.io.Source.fromFile("file.txt")
   //val lines = try source.mkString.split("/t") finally source.close()
-
-
 
   case class Client(name: String,
                     dollarBalance: Int,
@@ -36,162 +31,6 @@ object Main extends App {
   val listOfOrders: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
                                        Order("C2", 's', 'A', 5, 10),
     )
-
-  /**
-    * Function, that realises "sell" operation
-    *
-    * Realised via "case 'currency' => _" because there are just 4 currencies,
-    * if there were more of them, another method would be chosen
-    */
-  def sell(client: Client, order: Order): Client = order.currency match {
-
-    case 'A' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance + order.price * order.count,
-        client.balanceA - order.count,
-        client.balanceB,
-        client.balanceC,
-        client.balanceD
-      )
-
-    case 'B' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance + order.price * order.count,
-        client.balanceA,
-        client.balanceB - order.count,
-        client.balanceC,
-        client.balanceD
-      )
-
-    case 'C' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance + order.price * order.count,
-        client.balanceA,
-        client.balanceB,
-        client.balanceC - order.count,
-        client.balanceD
-      )
-
-
-    case 'D' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance + order.price * order.count,
-        client.balanceA,
-        client.balanceB,
-        client.balanceC,
-        client.balanceD - order.count
-      )
-  }
-
-  /**
-    * Function, that realises "buy" operation
-    *
-    * Realised via "case 'currency' => _" because there are just 4 currencies,
-    * if there were more of them, another method would be chosen
-    */
-  def buy(client: Client, order: Order): Client = order.currency match {
-
-    case 'A' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance - order.price * order.count,
-        client.balanceA + order.count,
-        client.balanceB,
-        client.balanceC,
-        client.balanceD
-      )
-
-    case 'B' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance - order.price * order.count,
-        client.balanceA,
-        client.balanceB + order.count,
-        client.balanceC,
-        client.balanceD
-      )
-
-    case 'C' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance - order.price * order.count,
-        client.balanceA,
-        client.balanceB,
-        client.balanceC + order.count,
-        client.balanceD
-      )
-
-    case 'D' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
-      Client(
-        client.name,
-        client.dollarBalance - order.price * order.count,
-        client.balanceA,
-        client.balanceB,
-        client.balanceC,
-        client.balanceD + order.count
-      )
-  }
-
 
   /**
     * Checks, if order is correct
@@ -236,7 +75,7 @@ object Main extends App {
       }
 
     } yield tmp
-  }
+  }.distinct
 
   println(main(listOfOrders, listOfClients))
 
