@@ -1,6 +1,3 @@
-import scala.util.{Failure, Success, Try}
-import scala.concurrent.ExecutionContext.Implicits.global
-import java.io._
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -14,14 +11,6 @@ object Main extends App {
 
   val listOfClients: List[Client] = Readers.readClients("clients.txt")
   val listOfOrders: List[Order] = Readers.readOrders("orders.txt")
-
-  val listOfClientsTest = List(Client("C1", 1000, 10, 5, 15, 0),
-                           Client("C2", 2000, 10, 5, 15, 0),
-    Client("C3", 2000, 10, 5, 15, 0))
-
-  val listOfOrdersTest: List[Order] = List(Order("C1", 'b', 'A', 5, 10),
-                                       Order("C2", 's', 'A', 5, 10),
-    Order("C3", 's', 'A', 5, 10))
 
   /**
     * Checks, if order is correct
@@ -41,7 +30,9 @@ object Main extends App {
 
   }
 
-
+  /**
+    * Returns the list of all the transactions
+    */
   def affectedClients(input_orders: List[utils.Order], input_clients: List[utils.Client]): List[utils.Client] = {
     for {
       order1 <- input_orders
@@ -58,11 +49,9 @@ object Main extends App {
           input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
 
+      } filter {
+        old => old != firstClient && old != secondClient
       }
-//        filter {
-//        old => old.dollarBalance != firstClient.dollarBalance && old.dollarBalance != secondClient.dollarBalance
-//
-//      }
         else if (order1.operation == 'b' && !order1.isCompleted && !order2.isCompleted) {
 
           input_orders.map { case `order1` => orderCompletion(order1); case x => x }
@@ -70,28 +59,26 @@ object Main extends App {
           input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
 
+      } filter {
+        old => old != firstClient && old != secondClient
       }
-//        filter {
-//        old => old.dollarBalance != firstClient.dollarBalance && old.dollarBalance != secondClient.dollarBalance
-//
-//      }
         else {
           input_orders.map {x => x}
           input_clients.map {x => x}
+        } filter {
+          old => old != firstClient && old != secondClient
         }
-//        filter {
-//          old => old.dollarBalance != firstClient.dollarBalance && old.dollarBalance != secondClient.dollarBalance
-//        }
       }
 
     } yield tmp
   }.distinct
 
-  if (affectedClients(listOfOrdersTest, listOfClientsTest) == List()) println(listOfClientsTest)
-  else println(affectedClients(listOfOrdersTest, listOfClientsTest))
+  if (affectedClients(listOfOrders, listOfClients) == List()) println(listOfClients)
+  else println(affectedClients(listOfOrders, listOfClients))
 
-//  val outcome_result: List[Client] = main(listOfOrders, listOfClients)
-//
-//  val content = outcome_result.mkString("\n").getBytes
-//  Files.write(Paths.get("result.txt"), content)
+
+  val outcome_result: List[Client] = affectedClients(listOfOrders, listOfClients)
+
+  val content = outcome_result.mkString("\n").getBytes
+  Files.write(Paths.get("result.txt"), content)
 }
