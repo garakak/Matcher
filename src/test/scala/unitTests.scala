@@ -46,7 +46,7 @@ class unitTests extends Matchers {
                                 Client("C3", 2000, 10, 5, 15, 0))
   val testListOfOrders5 = List(Order("C1", 'b', 'A', 5, 10),
                                Order("C2", 's', 'A', 5, 10))
-  val result5 = List(Client("C2", 2050, 0, 5, 15, 0), Client("C1", 950, 20, 5, 15, 0))
+  val result5 = List(Client("C2", 2050, 0, 5, 15, 0), Client("C3", 2000, 10, 5, 15, 0), Client("C1", 950, 20, 5, 15, 0))
 
   affectedClients(testListOfOrders5, testListOfClients5) should be (result5)
 
