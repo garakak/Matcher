@@ -1,4 +1,4 @@
-import Main.{Client, Order}
+import utils.{Client, NoSuchCurrencyError, Order}
 
 object Operations {
 
@@ -11,13 +11,6 @@ object Operations {
   def sell(client: Client, order: Order): Client = order.currency match {
 
     case 'A' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -28,13 +21,6 @@ object Operations {
       )
 
     case 'B' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -45,13 +31,6 @@ object Operations {
       )
 
     case 'C' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -63,13 +42,6 @@ object Operations {
 
 
     case 'D' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance + order.price * order.count,
@@ -77,6 +49,18 @@ object Operations {
         client.balanceB,
         client.balanceC,
         client.balanceD - order.count
+      )
+
+    case anotherCurrency =>
+      NoSuchCurrencyError("No such currency:", anotherCurrency) //Can be converted to logging
+
+      Client(
+        client.name,
+        client.dollarBalance,
+        client.balanceA,
+        client.balanceB,
+        client.balanceC,
+        client.balanceD
       )
   }
 
@@ -89,13 +73,6 @@ object Operations {
   def buy(client: Client, order: Order): Client = order.currency match {
 
     case 'A' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -106,13 +83,6 @@ object Operations {
       )
 
     case 'B' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -123,13 +93,6 @@ object Operations {
       )
 
     case 'C' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -140,13 +103,6 @@ object Operations {
       )
 
     case 'D' =>
-      Order(order.client,
-        order.operation,
-        order.currency,
-        order.price,
-        order.count,
-        isCompleted = true)
-
       Client(
         client.name,
         client.dollarBalance - order.price * order.count,
@@ -155,6 +111,34 @@ object Operations {
         client.balanceC,
         client.balanceD + order.count
       )
+
+    case anotherCurrency =>
+      NoSuchCurrencyError("No such currency:", anotherCurrency) //Can be converted to logging
+
+      Client(
+        client.name,
+        client.dollarBalance,
+        client.balanceA,
+        client.balanceB,
+        client.balanceC,
+        client.balanceD
+      )
+  }
+
+  /**
+    * Function, that realises completion of an order
+    *
+    * count -> 0
+    * price -> 0
+    * isCompleted -> true
+    */
+  def orderCompletion(order: Order): Order = {
+    Order(order.client,
+      order.operation,
+      order.currency,
+      0,
+      0,
+      isCompleted = true)
   }
 
 }
