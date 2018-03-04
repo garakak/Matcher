@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 import java.io._
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -160,18 +159,23 @@ object Main extends App {
 
         input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
         input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
+      } filter {
+        old => old.dollarBalance != firstClient.dollarBalance && old.dollarBalance != secondClient.dollarBalance
       } else {
 
         input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
         input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
+      } filter {
+        old => old.dollarBalance != firstClient.dollarBalance && old.dollarBalance != secondClient.dollarBalance
       }
+
     } yield tmp
   }
 
   println(main(listOfOrders, listOfClients))
 
-  val outcome_result: List[Client] = main(listOfOrders, listOfClients)
-
-  val content = outcome_result.mkString("\n").getBytes
-  Files.write(Paths.get("result.txt"), content)
+//  val outcome_result: List[Client] = main(listOfOrders, listOfClients)
+//
+//  val content = outcome_result.mkString("\n").getBytes
+//  Files.write(Paths.get("result.txt"), content)
 }
