@@ -6,12 +6,13 @@ package utils
 sealed abstract class Errors {
   val code: String
   val message: String
-  val cur: Char
+  val resource: String
 
   val `NoSuchCurrency` = "NoSuchCurrency"
+  val `NoSuchClient` = "NoSuchClient"
 
 }
 
-final case class NoSuchCurrencyError(message: String, cur: Char='?') extends Errors {
+final case class NoSuchCurrencyError(message: String, resource: String="?") extends Errors {
   val code: String = `NoSuchCurrency`
 }

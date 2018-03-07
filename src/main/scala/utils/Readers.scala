@@ -34,8 +34,8 @@ object Readers {
         case Array(client, operation, curr, price, count) =>
           Order(
             client,
-            operation.head,
-            curr.head,
+            operation,
+            curr,
             price.toInt,
             count.toInt)
       }

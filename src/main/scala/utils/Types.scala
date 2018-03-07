@@ -14,8 +14,8 @@ case class Client(name: String,
   * Basic order type
   */
 case class Order(client: String,
-                 operation: Char,
-                 currency: Char,
+                 operation: String,
+                 currency: String,
                  price: Int,
                  count: Int,
                  isCompleted: Boolean = false)
