@@ -1,12 +1,26 @@
-import utils.Writer
-import utils.Readers
+import utils._
 import Operations.{buy, orderCompletion, sell}
-import utils.{Client, Order}
 
 object Main extends App {
 
-  val listOfClients: List[Client] = Readers.readClients("clients.txt")
+  val listOfCLient: List[Client] = Readers.readClients("clients.txt")
   val listOfOrders: List[Order] = Readers.readOrders("orders.txt")
+  val incomeOrder: List[Order] = List(Order("C1", "b", "A", 5, 10))
+
+  def mainRespond(inputOrders: List[Order], inputClients: List[Client]) = (inputClients, inputOrders) match {
+
+    case (_, List()) => {
+      println(EmptyOrderResponse(message = "There are no active orders"))
+  }
+    case (List(), _) => {
+      println(EmptyClientsResponse(message = "There are no clients"))
+    }
+
+    case _ => {
+
+    }
+  }
+
 
   /**
     * Checks, if order is correct
@@ -70,11 +84,11 @@ object Main extends App {
   }.distinct
 
   // Writing to a file is combined with printing for better visualisation
-  if (affectedClients(listOfOrders, listOfClients).isEmpty) {
+  if (affectedClients(listOfOrders, listOfCLient).isEmpty) {
     //Writer.writeToFile(listOfClients)
-    println(listOfClients)
+    println(listOfCLient)
   } else {
     //Writer.writeToFile(affectedClients(listOfOrders, listOfClients))
-    println(affectedClients(listOfOrders, listOfClients))
+    println(affectedClients(listOfOrders, listOfCLient))
   }
 }
