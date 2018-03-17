@@ -41,7 +41,7 @@ object Main extends App {
         if (order1.operation == 's' && !order1.isCompleted && !order2.isCompleted) {
 
           input_orders.map { case `order1` => orderCompletion(order1); case x => x }
-          input_orders.map { case `order1` => orderCompletion(order2); case x => x }
+          input_orders.map { case `order2` => orderCompletion(order2); case x => x }
           input_clients.map { case `firstClient` => sell(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => buy(secondClient, order2); case x => x }
 
@@ -51,7 +51,7 @@ object Main extends App {
         else if (order1.operation == 'b' && !order1.isCompleted && !order2.isCompleted) {
 
           input_orders.map { case `order1` => orderCompletion(order1); case x => x }
-          input_orders.map { case `order1` => orderCompletion(order2); case x => x }
+          input_orders.map { case `order2` => orderCompletion(order2); case x => x }
           input_clients.map { case `firstClient` => buy(firstClient, order1); case x => x }
           input_clients.map { case `secondClient` => sell(secondClient, order2); case x => x }
 
