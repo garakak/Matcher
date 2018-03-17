@@ -14,7 +14,7 @@ sealed abstract class Responses {
 
 }
 
-final case class EmptyOrderResponse(message: String, resource: String="") extends Responses {
+final case class EmptyOrderResponse(message: String, resource: String=" <main algorithm>") extends Responses {
   val code: String = `EmptyOrders`
 }
 

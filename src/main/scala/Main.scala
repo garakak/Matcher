@@ -17,6 +17,19 @@ object Main extends App {
     }
 
     case _ => {
+      val localOrders: List[Order] = inputOrders.tail
+      val firstOrder: Order = inputOrders.head
+
+      for {
+        secondOrder <- localOrders if checkOrder(firstOrder, secondOrder)
+
+        firstClient = inputClients.find(_.name == firstOrder.client).get
+        secondClient = inputClients.find(_.name == secondOrder.client).get
+
+        if (firstOrder.operation == "s") {
+
+        }
+      }
 
     }
   }
@@ -25,7 +38,7 @@ object Main extends App {
   /**
     * Checks, if order is correct
     */
-  def check_order(firstRequest: Order, secondRequest: Order): Boolean = {
+  def checkOrder(firstRequest: Order, secondRequest: Order): Boolean = {
 
     firstRequest.client != secondRequest.client &&
       firstRequest.operation != secondRequest.operation &&
@@ -46,7 +59,7 @@ object Main extends App {
   def affectedClients(input_orders: List[utils.Order], input_clients: List[utils.Client]): List[utils.Client] = {
     for {
       order1 <- input_orders
-      order2 <- input_orders if check_order(order1, order2)
+      order2 <- input_orders if checkOrder(order1, order2)
 
       firstClient = input_clients.find(_.name == order1.client).get //TODO: Can be modified with "getOrElse" to avoid
       secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
