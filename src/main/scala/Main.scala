@@ -11,16 +11,22 @@ object Main extends App {
   val testListOfOrders1 = List(Order("C1", "b", "A", 5, 10),
     Order("C2", "s", "A", 5, 10), Order("C3", "s", "A", 5, 10), Order("C1", "b", "A", 5, 10))
 
+
+  /**
+    * Returns the list of clients after comparing
+    *
+    * WARNING: Algorithm is experimental and uses variables, so it should be tested.
+    */
   def mainRespond(inputOrders: List[Order], inputClients: List[Client]) = (inputClients, inputOrders) match {
 
-    case (_, List()) => {
+    case (_, List()) =>
       println(EmptyOrderResponse(message = "There are no active orders"))
-  }
-    case (List(), _) => {
-      println(EmptyClientsResponse(message = "There are no clients"))
-    }
 
-    case _ => {
+    case (List(), _) =>
+      println(EmptyClientsResponse(message = "There are no clients"))
+
+
+    case _ =>
       var localOrders: mutable.Buffer[Order] = inputOrders.tail.toBuffer
       var firstOrder: Order = inputOrders.head
 
@@ -60,12 +66,10 @@ object Main extends App {
 
           }
         }
-      } else {println(secondOrder)}
       }
-
+      }
       localClients
     }
-  }
 
 
   /**
@@ -129,7 +133,6 @@ object Main extends App {
     } yield tmp
   }.distinct
 
-  // Writing to a file is combined with printing for better visualisation
  println(mainRespond(testListOfOrders1, testListOfClients1))
 
 
