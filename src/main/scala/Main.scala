@@ -5,6 +5,8 @@ import utils.{Client, Order}
 
 object Main extends App {
 
+  final val emptyClient: Client = Client("Empty", 0, 0, 0, 0, 0)
+
   val listOfClients: List[Client] = Readers.readClients("clients.txt")
   val listOfOrders: List[Order] = Readers.readOrders("orders.txt")
 
@@ -29,13 +31,14 @@ object Main extends App {
   /**
     * Returns the list of all the transactions
     */
-  def affectedClients(input_orders: List[utils.Order], input_clients: List[utils.Client]): List[utils.Client] = {
+  def affectedClients(input_orders: List[Order], input_clients: List[Client]): List[Client] = {
+
     for {
       order1 <- input_orders
       order2 <- input_orders if check_order(order1, order2)
 
-      firstClient = input_clients.find(_.name == order1.client).get //TODO: Can be modified with "getOrElse" to avoid
-      secondClient = input_clients.find(_.name == order2.client).get //TODO: operations from non-existing clients.
+      firstClient = input_clients.find(_.name == order1.client).getOrElse(emptyClient)
+      secondClient = input_clients.find(_.name == order2.client).getOrElse(emptyClient)
 
       tmp <- {
         if (order1.operation == 's' && !order1.isCompleted && !order2.isCompleted) {
