@@ -1,11 +1,15 @@
 import utils._
 import Operations.{buy, orderCompletion, sell}
 
+import scala.collection.mutable
+import scala.collection.immutable.RedBlackTree
+
 object Main extends App {
 
-  val listOfCLient: List[Client] = Readers.readClients("clients.txt")
-  val listOfOrders: List[Order] = Readers.readOrders("orders.txt")
-  val incomeOrder: List[Order] = List(Order("C1", "b", "A", 5, 10))
+  val testListOfClients1 = List(Client("C1", 1000, 10, 5, 15, 0),
+    Client("C2", 2000, 10, 5, 15, 0), Client("C3", 1000, 10, 5, 15, 0))
+  val testListOfOrders1 = List(Order("C1", "b", "A", 5, 10),
+    Order("C2", "s", "A", 5, 10), Order("C3", "s", "A", 5, 10), Order("C1", "b", "A", 5, 10))
 
   def mainRespond(inputOrders: List[Order], inputClients: List[Client]) = (inputClients, inputOrders) match {
 
@@ -17,20 +21,49 @@ object Main extends App {
     }
 
     case _ => {
-      val localOrders: List[Order] = inputOrders.tail
-      val firstOrder: Order = inputOrders.head
+      var localOrders: mutable.Buffer[Order] = inputOrders.tail.toBuffer
+      var firstOrder: Order = inputOrders.head
 
-      for {
-        secondOrder <- localOrders if checkOrder(firstOrder, secondOrder)
+      var localClients: mutable.Buffer[Client] = inputClients.toBuffer
 
-        firstClient = inputClients.find(_.name == firstOrder.client).get
-        secondClient = inputClients.find(_.name == secondOrder.client).get
+      for (secondOrder <- localOrders) {
+        if (checkOrder(firstOrder, secondOrder)) {
+          //println(firstOrder, secondOrder)
 
-        if (firstOrder.operation == "s") {
+          val firstClient = inputClients.find(_.name == firstOrder.client).get
+          val secondClient = inputClients.find(_.name == secondOrder.client).get
+          val firstOrderStable = firstOrder
+          println(firstOrderStable)
 
+        {
+          if (firstOrder.operation == "s" && secondOrder.operation == "b") {
+
+            localClients = localClients.map { case `firstClient` => sell(firstClient, firstOrder); case x => x }
+            localClients = localClients.map { case `secondClient` => buy(secondClient, secondOrder); case x => x }
+
+            localOrders = localOrders.map { case `firstOrderStable` => orderCompletion(firstOrder); case x => x }
+            localOrders = localOrders.map { case `secondOrder` => orderCompletion(secondOrder); case x => x }
+
+            //localOrders = localOrders.filter((x: Order) => !x.isCompleted) //???
+            firstOrder = localOrders.head
+
+          } else {
+
+            localClients = localClients.map { case `firstClient` => buy(firstClient, firstOrder); case x => x }
+            localClients = localClients.map { case `secondClient` => sell(secondClient, secondOrder); case x => x }
+
+            localOrders = localOrders.map { case `firstOrderStable` => orderCompletion(firstOrder); case x => x }
+            localOrders = localOrders.map { case `secondOrder` => orderCompletion(secondOrder); case x => x }
+
+            //localOrders = localOrders.filter((x: Order) => !x.isCompleted)
+            firstOrder = localOrders.head
+
+          }
         }
+      } else {println(secondOrder)}
       }
 
+      localClients
     }
   }
 
@@ -97,11 +130,7 @@ object Main extends App {
   }.distinct
 
   // Writing to a file is combined with printing for better visualisation
-  if (affectedClients(listOfOrders, listOfCLient).isEmpty) {
-    //Writer.writeToFile(listOfClients)
-    println(listOfCLient)
-  } else {
-    //Writer.writeToFile(affectedClients(listOfOrders, listOfClients))
-    println(affectedClients(listOfOrders, listOfCLient))
-  }
+ println(mainRespond(testListOfOrders1, testListOfClients1))
+
+
 }
