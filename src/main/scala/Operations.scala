@@ -52,7 +52,7 @@ object Operations {
       )
 
     case anotherCurrency =>
-      NoSuchCurrencyError("No such currency:", anotherCurrency) //Can be converted to logging
+      println(NoSuchCurrencyError("No such currency:", anotherCurrency)) //Can be converted to logging
 
       Client(
         client.name,
@@ -113,7 +113,7 @@ object Operations {
       )
 
     case anotherCurrency =>
-      NoSuchCurrencyError("No such currency:", anotherCurrency) //Can be converted to logging
+      println(NoSuchCurrencyError("No such currency:", anotherCurrency)) //Can be converted to logging
 
       Client(
         client.name,
