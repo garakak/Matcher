@@ -76,7 +76,7 @@ def check_order(first_client_request, second_client_request):
 
         return completed_client_1, completed_client_2
     else:
-        return ['None'], ['None']
+        return [''], ['']
 
 
 # Finds required client in a list of total clients
@@ -93,10 +93,11 @@ def processing():
     while parsed_orders[fst_order] is not None:
         while parsed_orders[snd_order] is not None:
             new_client1, new_client2 = check_order(parsed_orders[fst_order], parsed_orders[snd_order])
-            if new_client1[0] != 'None':
+            if new_client1[0] != '' and new_client2[0] != '':
                 find_client(new_client1)
                 find_client(new_client2)
             snd_order += 1
+                      
 
         fst_order += 1
 
