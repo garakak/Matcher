@@ -13,7 +13,7 @@ object Main extends App {
   /**
     * Checks, if order is correct
     */
-  def check_order(firstRequest: Order, secondRequest: Order): Boolean = {
+  def checkOrder(firstRequest: Order, secondRequest: Order): Boolean = {
 
     firstRequest.client != secondRequest.client &&
       firstRequest.operation != secondRequest.operation &&
@@ -25,7 +25,6 @@ object Main extends App {
           secondRequest.price) &&
       !firstRequest.isCompleted &&
       !secondRequest.isCompleted
-
   }
 
   /**
